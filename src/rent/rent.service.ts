@@ -6,10 +6,10 @@ import Const from '../constants';
 export class RentService {
   constructor(@Inject(Const.DATABASE_MODULE) private connection: DBService) {}
 
-  async getHello(): Promise<string> {
+  async isAvailable(): Promise<boolean> {
     const res = await this.connection.query('SELECT * FROM test', null);
     console.log(res.rows);
     // await pool.end();
-    return 'Hello World!';
+    return true;
   }
 }

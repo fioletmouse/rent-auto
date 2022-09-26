@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
+import { RentInput } from './rent.dto';
 import { RentService } from './rent.service';
 
 @Controller()
@@ -6,7 +7,17 @@ export class RentController {
   constructor(private readonly appService: RentService) {}
 
   @Get()
-  async getHello(): Promise<string> {
-    return await this.appService.getHello();
+  async isAvailable(@Query() queryParams: RentInput): Promise<boolean> {
+    return await this.appService.isAvailable();
+  }
+  async prelimCalc(id: number, start: Date, end: Date) {
+
+  }
+
+  async book(id: number, start: Date, end: Date) {
+
+  }
+  async report() {
+
   }
 }
