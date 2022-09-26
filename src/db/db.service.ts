@@ -8,7 +8,7 @@ export class DBService {
 
   private pool = new Pool(this.configService.get('pgCredentials'));
 
-  async query(text, params) {
+  async query(text: string, params: any[]) {
     const start = Date.now();
     const res = await this.pool.query(text, params);
     const duration = Date.now() - start;
