@@ -14,8 +14,8 @@ export class RentController {
   }
 
   @Get('calculation')
-  async prelimCalc(id: number, start: Date, end: Date) {
-
+  async prelimCalc(@Query() queryParams: RentInput): Promise<number> {
+    return await this.appService.prelimCalc(queryParams);
   }
 
   @Post('book')
