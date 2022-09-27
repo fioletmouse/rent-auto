@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import * as moment from 'moment';
-import { IRate } from 'src/rent/rent.dto';
+import { Injectable } from "@nestjs/common";
+import * as moment from "moment";
+import { IRate } from "src/rent/rent.dto";
 
 @Injectable()
 export class CalcService {
@@ -9,11 +9,11 @@ export class CalcService {
   prelimitCalculation = (rates: IRate[], daysCount: number) => {
     let daysLeft = daysCount;
     const totalSum = rates.reduce((sum, rate) => {
-      if(daysLeft > 0) {
+      if (daysLeft > 0) {
         const periodDays = rate.to - rate.from + 1;
         const percentage = rate.percentage ? rate.percentage / 100 : 0;
-        const payment = rate.rate - rate.rate * percentage
-        if(daysLeft >= periodDays) {
+        const payment = rate.rate - rate.rate * percentage;
+        if (daysLeft >= periodDays) {
           sum += periodDays * payment;
         } else {
           sum += daysLeft * payment;
@@ -23,6 +23,5 @@ export class CalcService {
       return sum;
     }, 0);
     return totalSum;
-  }
-
+  };
 }

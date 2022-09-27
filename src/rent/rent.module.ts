@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../db/db.module';
-import { RentController } from './rent.controller';
-import { RentService } from './rent.service';
-import { ConfigModule } from '@nestjs/config';
-import { environment } from '../environment';
-import { BLModule } from 'src/bl/bl.module';
+import { Module } from "@nestjs/common";
+import { DatabaseModule } from "../db/db.module";
+import { RentController } from "./rent.controller";
+import { RentService } from "./rent.service";
+import { ConfigModule } from "@nestjs/config";
+import { environment } from "../environment";
+import { BLModule } from "src/bl/bl.module";
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { BLModule } from 'src/bl/bl.module';
       load: [() => environment],
     }),
     DatabaseModule,
-    BLModule
+    BLModule,
   ],
   controllers: [RentController],
   providers: [RentService],
