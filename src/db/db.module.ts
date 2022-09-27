@@ -5,6 +5,6 @@ import { ConfigModule } from "@nestjs/config";
 @Module({
   imports: [ConfigModule],
   providers: [dbProvider],
-  exports: [dbProvider],
+  exports: [dbProvider]
 })
 export class DatabaseModule {}

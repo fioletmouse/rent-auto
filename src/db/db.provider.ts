@@ -7,5 +7,5 @@ export const dbProvider = {
   inject: [ConfigService],
   useFactory: (configService: ConfigService): DBService => {
     return new DBService(configService);
-  },
+  }
 };

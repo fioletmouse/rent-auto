@@ -10,12 +10,12 @@ import { BLModule } from "src/bl/bl.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [() => environment],
+      load: [() => environment]
     }),
     DatabaseModule,
-    BLModule,
+    BLModule
   ],
   controllers: [RentController],
-  providers: [RentService],
+  providers: [RentService]
 })
 export class RentModule {}

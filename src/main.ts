@@ -19,7 +19,7 @@ async function bootstrap() {
   const globalPrefix = "rent";
   app.use(helmet());
   app.enableCors({
-    origin: new RegExp(configService.get("corsRegex")),
+    origin: new RegExp(configService.get("corsRegex"))
   });
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());

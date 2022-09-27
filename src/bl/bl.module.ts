@@ -4,6 +4,6 @@ import { CalcService } from "./calc.service";
 
 @Module({
   providers: [UtilsService, CalcService],
-  exports: [UtilsService, CalcService],
+  exports: [UtilsService, CalcService]
 })
 export class BLModule {}

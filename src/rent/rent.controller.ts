@@ -9,16 +9,12 @@ export class RentController {
   constructor(private readonly appService: RentService) {}
 
   @Get("isAvailable")
-  async isAvailable(
-    @Query() queryParams: RentInput
-  ): Promise<IRentOutput<boolean>> {
+  async isAvailable(@Query() queryParams: RentInput): Promise<IRentOutput<boolean>> {
     return await this.appService.isAvailable(queryParams);
   }
 
   @Get("calculation")
-  async prelimCalc(
-    @Query() queryParams: RentInput
-  ): Promise<IRentOutput<number>> {
+  async prelimCalc(@Query() queryParams: RentInput): Promise<IRentOutput<number>> {
     return await this.appService.prelimCalc(queryParams);
   }
 
