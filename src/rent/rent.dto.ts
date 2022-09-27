@@ -21,7 +21,15 @@ export class RentInput {
     readonly end: Date
 }
 
-export interface RentOutput<T> {
+export interface IRentOutput<T> {
   result: T;
   warnings: string[];
+}
+
+export interface IRate {
+  from: number;
+  to: number;
+  rate: number;
+  percentage?: number;
+  
 }

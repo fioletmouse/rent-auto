@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
-import { RentInput, RentOutput } from './rent.dto';
+import { RentInput, IRentOutput } from './rent.dto';
 import { RentService } from './rent.service';
-import { ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBadRequestResponse } from '@nestjs/swagger';
 
 @ApiTags('rent')
 @Controller()
@@ -9,17 +9,18 @@ export class RentController {
   constructor(private readonly appService: RentService) {}
 
   @Get('isAvailable')
-  async isAvailable(@Query() queryParams: RentInput): Promise<RentOutput<boolean>> {
+  async isAvailable(@Query() queryParams: RentInput): Promise<IRentOutput<boolean>> {
     return await this.appService.isAvailable(queryParams);
   }
 
   @Get('calculation')
-  async prelimCalc(@Query() queryParams: RentInput): Promise<number> {
+  async prelimCalc(@Query() queryParams: RentInput): Promise<IRentOutput<number>> {
     return await this.appService.prelimCalc(queryParams);
   }
 
   @Post('book')
-  async book(@Query() queryParams: RentInput) {
+  @ApiBadRequestResponse({ description: 'Issue with car availability' })
+  async book(@Query() queryParams: RentInput): Promise<IRentOutput<boolean>> {
     return await this.appService.book(queryParams);
   }
 
