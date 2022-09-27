@@ -19,4 +19,9 @@ export class RentInput {
     @IsDate()
     @IsNotEmpty()
     readonly end: Date
-  }
+}
+
+export interface RentOutput<T> {
+  result: T;
+  warnings: string[];
+}

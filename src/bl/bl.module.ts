@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { BLService } from './bl.service';
+import { UtilsService } from './utils.service';
+import { CalcService } from './calc.service';
 
 @Module({
-  providers: [BLService],
-  exports: [BLService],
+  providers: [UtilsService, CalcService],
+  exports: [UtilsService, CalcService],
 })
 export class BLModule {}

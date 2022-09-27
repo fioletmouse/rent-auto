@@ -2,14 +2,11 @@ import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 
 @Injectable()
-export class BLService {
+export class UtilsService {
   constructor() {}
 
   moreThanDayLimit = (start: Date, end: Date) => {
-    const mEnd = moment(end);
-    const mStart = moment(start);
-    const daysCount =  mEnd.diff(mStart, 'days') + 1;
-    return daysCount > 30;
+    return this.daysCount(start, end) > 30;
   }
 
   private isWeekendDay = (date: Date) => {
@@ -19,5 +16,12 @@ export class BLService {
 
   isWeekendDates = (start: Date, end: Date) => {
     return this.isWeekendDay(start) || this.isWeekendDay(end);
+  }
+
+  daysCount = (start: Date, end: Date) => {
+    const mEnd = moment(end);
+    const mStart = moment(start);
+    const daysCount =  mEnd.diff(mStart, 'days') + 1;
+    return daysCount;
   }
 }

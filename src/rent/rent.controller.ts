@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
-import { RentInput } from './rent.dto';
+import { RentInput, RentOutput } from './rent.dto';
 import { RentService } from './rent.service';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiResponse } from '@nestjs/swagger';
 
@@ -9,7 +9,7 @@ export class RentController {
   constructor(private readonly appService: RentService) {}
 
   @Get('isAvailable')
-  async isAvailable(@Query() queryParams: RentInput): Promise<boolean> {
+  async isAvailable(@Query() queryParams: RentInput): Promise<RentOutput<boolean>> {
     return await this.appService.isAvailable(queryParams);
   }
 
