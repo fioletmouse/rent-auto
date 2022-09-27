@@ -19,8 +19,8 @@ export class RentController {
   }
 
   @Post('book')
-  async book(id: number, start: Date, end: Date) {
-
+  async book(@Query() queryParams: RentInput) {
+    return await this.appService.book(queryParams);
   }
 
   @Get('report')
