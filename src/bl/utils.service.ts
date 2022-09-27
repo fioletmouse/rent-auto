@@ -3,8 +3,6 @@ import * as moment from "moment";
 
 @Injectable()
 export class UtilsService {
-  constructor() {}
-
   moreThanDayLimit = (start: Date, end: Date) => {
     return this.daysCount(start, end) > 30;
   };

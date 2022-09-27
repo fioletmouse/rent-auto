@@ -24,6 +24,10 @@ export class RentController {
     return await this.appService.book(queryParams);
   }
 
+  // logger
+  // docker compose
+  // db seed
+  // tests
   @Get("report")
   async report() {}
 }

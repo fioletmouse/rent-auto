@@ -4,6 +4,7 @@ import { CalcService } from "src/bl/calc.service";
 import { DBService } from "src/db/db.service";
 import Const from "../constants";
 import { IRate, RentInput, IRentOutput } from "./rent.dto";
+import * as moment from "moment";
 
 @Injectable()
 export class RentService {
@@ -17,6 +18,10 @@ export class RentService {
     const { id, start, end } = rentInput;
     const output: IRentOutput<boolean> = { result: null, warnings: [] };
 
+    // there should be an interval between booking
+    const startWithInterval = moment(start).add(-Const.INTERVAL, "days").format("YYYY-MM-DD");
+    const endWithInterval = moment(end).add(Const.INTERVAL, "days").format("YYYY-MM-DD");
+
     // warnings
     if (this.utils.moreThanDayLimit(start, end)) {
       output.warnings.push("You check period that is more than 30 days. Booking will be unavailable.");
@@ -26,19 +31,18 @@ export class RentService {
     }
 
     const res = await this.connection.query(
+      // dates conditions: inside another range, intersect with start, intersect with end
       "SELECT * FROM book_session WHERE auto_id = $1 AND (\
         (start_date <= $2 AND end_date >= $3) OR \
         (start_date >= $2 AND end_date >= $3 AND $3 >= start_date) OR \
         (start_date <= $2 AND end_date <= $3 AND $2 <= end_date) \
       )",
-      [id, start, end]
+      [id, startWithInterval, endWithInterval]
     );
     output.result = res.rowCount === 0;
     return output;
   }
 
-  // interval between booking
-  // logger
   async prelimCalc(rentInput: RentInput): Promise<IRentOutput<number>> {
     const { start, end } = rentInput;
     const res = await this.connection.query('SELECT * FROM rate WHERE $1 BETWEEN start_date AND end_date ORDER BY "from" ASC', [start]);
