@@ -26,9 +26,6 @@ export class RentController {
     return await this.appService.book(queryParams);
   }
 
-  // docker compose
-  // db seed
-  // tests
   @Get("currentMonthReport")
   async currentMonthReport(): Promise<IRentOutput<IMonthlyReport[]>> {
     return await this.appService.monthlyReport();
