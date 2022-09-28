@@ -7,7 +7,7 @@ services:
       context: .
     environment:
       - POSTGRES_USER=eakulenko
-      - POSTGRES_PASSWORD=135790
+      - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=booking
     ports:
       - 5432:5432

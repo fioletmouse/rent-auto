@@ -3,7 +3,7 @@ export const environment = {
     user: "eakulenko",
     host: "localhost",
     database: "booking",
-    password: "135790",
+    password: "123456",
     port: 5432
   },
   corsRegex: "^(http(s)?://)(www.)?(localhost:[0-9]{4,5})(/.*)*?$",
