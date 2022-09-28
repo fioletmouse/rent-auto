@@ -1,5 +1,5 @@
 # rent-auto
-Small auto rent API. NestJS, Postgres 11 w/o TypeORM (plain SQL)
+Small auto rent API. NestJS, Postgres 11 w/o TypeORM (plain SQL) in Docker
 
 # Start
 1. Open `deploy` folder and run `docker compose up` command. 
