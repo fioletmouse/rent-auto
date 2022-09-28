@@ -32,3 +32,10 @@ export interface IRate {
   rate: number;
   percentage?: number;
 }
+
+export interface IMonthlyReport {
+  auto_id: number;
+  book_days: number;
+  book_percentage: number;
+  key: string;
+}

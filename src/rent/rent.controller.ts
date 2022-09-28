@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Query } from "@nestjs/common";
-import { RentInput, IRentOutput } from "./rent.dto";
+import { RentInput, IRentOutput, IMonthlyReport } from "./rent.dto";
 import { RentService } from "./rent.service";
 import { ApiTags, ApiBadRequestResponse } from "@nestjs/swagger";
 
@@ -24,10 +24,11 @@ export class RentController {
     return await this.appService.book(queryParams);
   }
 
-  // logger
   // docker compose
   // db seed
   // tests
-  @Get("report")
-  async report() {}
+  @Get("currentMonthReport")
+  async currentMonthReport(): Promise<IRentOutput<IMonthlyReport[]>> {
+    return await this.appService.monthlyReport();
+  }
 }

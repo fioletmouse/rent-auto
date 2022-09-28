@@ -1,13 +1,14 @@
-import { Inject, Injectable, BadRequestException } from "@nestjs/common";
+import { Inject, Injectable, BadRequestException, Logger } from "@nestjs/common";
 import { UtilsService } from "src/bl/utils.service";
 import { CalcService } from "src/bl/calc.service";
 import { DBService } from "src/db/db.service";
 import Const from "../constants";
-import { IRate, RentInput, IRentOutput } from "./rent.dto";
+import { IRate, RentInput, IRentOutput, IMonthlyReport } from "./rent.dto";
 import * as moment from "moment";
 
 @Injectable()
 export class RentService {
+  private readonly logger = new Logger(RentService.name);
   constructor(
     private readonly utils: UtilsService,
     private readonly calc: CalcService,
@@ -24,10 +25,14 @@ export class RentService {
 
     // warnings
     if (this.utils.moreThanDayLimit(start, end)) {
-      output.warnings.push("You check period that is more than 30 days. Booking will be unavailable.");
+      const errorText = "You check period that is more than 30 days. Booking will be unavailable.";
+      output.warnings.push(errorText);
+      this.logger.warn(errorText);
     }
     if (this.utils.isWeekendDates(start, end)) {
-      output.warnings.push("Start or end date is a weekend day. Booking will be unavailable.");
+      const errorText = "Start or end date is a weekend day. Booking will be unavailable.";
+      output.warnings.push(errorText);
+      this.logger.warn(errorText);
     }
 
     const res = await this.connection.query(
@@ -75,5 +80,27 @@ export class RentService {
     } catch (err) {
       throw err;
     }
+  }
+
+  async monthlyReport(): Promise<IRentOutput<IMonthlyReport[]>> {
+    const reportQuery =
+      "WITH rental(auto_id, book_days, days_in_month) AS \
+    ( \
+      SELECT auto_id, \
+	      SUM((LEAST(end_date, (date_trunc('MONTH', now())+interval '1 month - 1 day')::DATE) - \
+             GREATEST(start_date, (date_trunc('MONTH', now()))::DATE))+1), \
+	      date_part('days',(date_trunc('month', NOW()) + interval '1 month - 1 day')) \
+	    FROM public.book_session \
+	    WHERE extract(month FROM NOW()) = extract(month from start_date) OR \
+	          extract(month FROM NOW()) = extract(month from end_date) \
+	    GROUP by auto_id \
+    ) \
+    SELECT auto_id, book_days, ROUND((book_days*100/days_in_month::int2), 0) AS \"book_percentage\", 'auto' AS \"key\" \
+    FROM  rental \
+    UNION ALL \
+    SELECT COUNT(auto_id), SUM(book_days), ROUND(SUM(book_days)*100/(COUNT(auto_id)*MAX(days_in_month::int2)), 0), 'total' \
+    FROM  rental";
+    const res = await this.connection.query(reportQuery, undefined);
+    return { result: res.rows as IMonthlyReport[], warnings: [] };
   }
 }

@@ -6,7 +6,9 @@ import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 async function bootstrap() {
-  const app = await NestFactory.create(RentModule);
+  const app = await NestFactory.create(RentModule, {
+    logger: ["log"]
+  });
   const configService = app.get(ConfigService);
 
   const swaggerVariablesConfig = configService.get("swagger");
