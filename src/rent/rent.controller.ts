@@ -9,11 +9,13 @@ export class RentController {
   constructor(private readonly appService: RentService) {}
 
   @Get("isAvailable")
+  @ApiBadRequestResponse({ description: "Dates issue" })
   async isAvailable(@Query() queryParams: RentInput): Promise<IRentOutput<boolean>> {
     return await this.appService.isAvailable(queryParams);
   }
 
   @Get("calculation")
+  @ApiBadRequestResponse({ description: "Dates issue" })
   async prelimCalc(@Query() queryParams: RentInput): Promise<IRentOutput<number>> {
     return await this.appService.prelimCalc(queryParams);
   }

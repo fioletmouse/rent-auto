@@ -23,6 +23,8 @@ export class RentService {
     const startWithInterval = moment(start).add(-Const.INTERVAL, "days").format("YYYY-MM-DD");
     const endWithInterval = moment(end).add(Const.INTERVAL, "days").format("YYYY-MM-DD");
 
+    if (!this.utils.datesRightOrder(start, end)) throw new BadRequestException("End date has to be after start date");
+
     // warnings
     if (this.utils.moreThanDayLimit(start, end)) {
       const errorText = "You check period that is more than 30 days. Booking will be unavailable.";
@@ -50,6 +52,9 @@ export class RentService {
 
   async prelimCalc(rentInput: RentInput): Promise<IRentOutput<number>> {
     const { start, end } = rentInput;
+
+    if (!this.utils.datesRightOrder(start, end)) throw new BadRequestException("End date has to be after start date");
+
     const res = await this.connection.query('SELECT * FROM rate WHERE $1 BETWEEN start_date AND end_date ORDER BY "from" ASC', [start]);
     const rates: IRate[] = res.rows.map((row) => ({
       from: row.from,

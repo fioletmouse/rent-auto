@@ -22,4 +22,11 @@ export class UtilsService {
     const daysCount = mEnd.diff(mStart, "days") + 1;
     return daysCount;
   };
+
+  datesRightOrder = (start: Date, end: Date): boolean => {
+    const mEnd = moment(end);
+    const mStart = moment(start);
+    const isBefore = mStart.isBefore(mEnd);
+    return isBefore;
+  };
 }
