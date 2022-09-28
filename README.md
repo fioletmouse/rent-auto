@@ -1,10 +1,13 @@
 # rent-auto
-Small auto rent API. NestJs, Postgres w/o TypeORM (plain SQL)
+Small auto rent API. NestJS, Postgres 11 w/o TypeORM (plain SQL)
 
 # Start
-1. Change postgress variables in `environment.ts`
-2. run postgres
-3. `npm start`
+1. Open deploy folder and run `docker compose up` command. 
+This command setup&running postgress 11 instance, create tables and seed initial data - 5 test auto and rates.
+Note: if you change postgress env in compose file then need to update `environment.ts` file as well.
+
+2. `npm start`
+
 # Docs
 
 Path prefix is `rent`. Swagger url by default `http://localhost:3000/rent/api`
