@@ -1,7 +1,7 @@
 import { Inject, Injectable, BadRequestException, Logger } from "@nestjs/common";
-import { UtilsService } from "src/bl/utils.service";
-import { CalcService } from "src/bl/calc.service";
-import { DBService } from "src/db/db.service";
+import { UtilsService } from "../bl/utils.service";
+import { CalcService } from "../bl/calc.service";
+import { DBService } from "../db/db.service";
 import Const from "../constants";
 import { IRate, RentInput, IRentOutput, IMonthlyReport } from "./rent.dto";
 import * as moment from "moment";
@@ -19,10 +19,6 @@ export class RentService {
     const { id, start, end } = rentInput;
     const output: IRentOutput<boolean> = { result: null, warnings: [] };
 
-    // there should be an interval between booking
-    const startWithInterval = moment(start).add(-Const.INTERVAL, "days").format("YYYY-MM-DD");
-    const endWithInterval = moment(end).add(Const.INTERVAL, "days").format("YYYY-MM-DD");
-
     if (!this.utils.datesRightOrder(start, end)) throw new BadRequestException("End date has to be after start date");
 
     // warnings
@@ -36,6 +32,10 @@ export class RentService {
       output.warnings.push(errorText);
       this.logger.warn(errorText);
     }
+
+    // there should be an interval between booking
+    const startWithInterval = moment(start).add(-Const.INTERVAL, "days").format("YYYY-MM-DD");
+    const endWithInterval = moment(end).add(Const.INTERVAL, "days").format("YYYY-MM-DD");
 
     const res = await this.connection.query(
       // dates conditions: inside another range, intersect with start, intersect with end
