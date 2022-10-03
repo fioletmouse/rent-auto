@@ -90,21 +90,23 @@ export class RentService {
   async monthlyReport(): Promise<IRentOutput<IMonthlyReport[]>> {
     const reportQuery =
       "WITH rental(auto_id, book_days, days_in_month) AS \
-    ( \
-      SELECT auto_id, \
-	      SUM((LEAST(end_date, (date_trunc('MONTH', now())+interval '1 month - 1 day')::DATE) - \
-             GREATEST(start_date, (date_trunc('MONTH', now()))::DATE))+1), \
-	      date_part('days',(date_trunc('month', NOW()) + interval '1 month - 1 day')) \
-	    FROM public.book_session \
-	    WHERE extract(month FROM NOW()) = extract(month from start_date) OR \
-	          extract(month FROM NOW()) = extract(month from end_date) \
-	    GROUP by auto_id \
-    ) \
-    SELECT auto_id, book_days, ROUND((book_days*100/days_in_month::int2), 0) AS \"book_percentage\", 'auto' AS \"key\" \
-    FROM  rental \
-    UNION ALL \
-    SELECT COUNT(auto_id), SUM(book_days), ROUND(SUM(book_days)*100/(COUNT(auto_id)*MAX(days_in_month::int2)), 0), 'total' \
-    FROM  rental";
+  ( \
+    SELECT auto_id, \
+      SUM((LEAST(end_date, (date_trunc('MONTH', now())+interval '1 month - 1 day')::DATE) - \
+           GREATEST(start_date, (date_trunc('MONTH', now()))::DATE))+1), \
+      date_part('days',(date_trunc('month', NOW()) + interval '1 month - 1 day')) \
+    FROM public.book_session \
+    WHERE (extract(month FROM NOW()) = extract(month from start_date) OR \
+          extract(month FROM NOW()) = extract(month from end_date)) AND \
+          (extract(year FROM NOW()) = extract(year from start_date) AND \
+           extract(year FROM NOW()) = extract(year from end_date)) \
+    GROUP by auto_id \
+  ) \
+  SELECT auto_id, book_days, ROUND((book_days*100/days_in_month::int2), 0) AS \"book_percentage\", 'auto' AS \"key\" \
+  FROM  rental \
+  UNION ALL \
+  SELECT COUNT(auto_id), SUM(book_days), ROUND(SUM(book_days)*100/(COUNT(auto_id)*MAX(days_in_month::int2)), 0), 'total' \
+  FROM  rental";
     const res = await this.connection.query(reportQuery, undefined);
     return { result: res.rows as IMonthlyReport[], warnings: [] };
   }
