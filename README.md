@@ -2,10 +2,10 @@
 Small auto rent API. NestJS, Postgres 11 w/o TypeORM (plain SQL) in Docker
 
 # Start
-1. Open `deploy` folder and run `docker compose up` command. 
+1. Open `deploy` folder and run `docker compose up` command.
 This command setup & running postgress 11 instance, create tables and seed initial data - 5 test auto and rates.
 Note: if you change postgres env in compose file then update `environment.ts` file as well.
-
+In case of Windows - change new line symbols in `deploy/scripts/seed.sh` file from CRLF to LF
 2. `npm start`
 
 # Docs
